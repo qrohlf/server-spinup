@@ -4,7 +4,7 @@
 # written by @qrohlf and licensed under the WTFPL
 
 # Variables
-###############################
+##############################################
 
 # User to create and grant root privileges to
 ADMINUSER="qrohlf"
@@ -44,3 +44,14 @@ apt-add-repository ppa:brightbox/ruby-ng # includes nginx with passenger, newer 
 ###############################################
 apt-get update
 apt-get install $PACKAGES $GUI
+
+# 5. Set up VNC
+###############################################
+if [$GUI]
+   then
+   # Install and configure VNC
+fi
+
+# 5. Install sexy-bash-prompt to $ADMINUSER and root bashrc
+###############################################
+
