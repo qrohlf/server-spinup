@@ -40,19 +40,21 @@ sed -i 's/^PermitRootLogin yes/PermitRootLogin no/' /etc/ssh/sshd_config
 # 3. Add PPA for passenger-nginx
 ###############################################
 apt-get update
-apt-get install python-software-properties # needed for apt-add-repository
+apt-get install -y python-software-properties # needed for apt-add-repository
 apt-add-repository ppa:brightbox/ruby-ng # includes nginx with passenger, newer ruby versions
 
 # 4. Install dev packages and GUI
 ###############################################
 apt-get update
-apt-get install $PACKAGES $GUI
+apt-get install -y $PACKAGES $GUI
 
 # 5. Set up VNC
 ###############################################
 if [$GUI]
    then
-   
+   apt-get install -y tightvncserver
+   # install vncserver init.d script here. The script should generate a random 8-character password, 
+   # feed it to vncpasswd, then start the vnc server
 fi
 
 # 5. Install sexy-bash-prompt to $ADMINUSER and root bashrc
