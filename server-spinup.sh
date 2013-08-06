@@ -13,6 +13,9 @@ ADMINUSER="qrohlf"
 PACKAGES="git make ruby1.9.1 nginx-full"
 
 # Comment this line out for no GUI
+# I use a GUI for my 'sandbox' servers because it makes
+# configuration and setup much easier, but I woudn't
+# recommend installing onein an actual production environment
 GUI="xfce4 xubuntu-artwork xubuntu-default-settings" 
 
 # 0. Sanity Check
@@ -49,7 +52,7 @@ apt-get install $PACKAGES $GUI
 ###############################################
 if [$GUI]
    then
-   # Install and configure VNC
+   
 fi
 
 # 5. Install sexy-bash-prompt to $ADMINUSER and root bashrc
