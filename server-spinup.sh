@@ -30,7 +30,8 @@ fi
 # 1. Add the new user and grant root privileges
 ###############################################
 PASS=`(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 16 | head -n 1)`
-adduser -p $PASS -g sudo --gecos "" $ADMINUSER
+adduser --ingroup sudo --gecos "" --disabled-password $ADMINUSER
+echo $ADMINUSER:$PASS | chpasswd
 echo user $ADMINUSER created with generated password $PASS
 
 # 2. Disallow root login via SSH
