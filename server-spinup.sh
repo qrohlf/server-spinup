@@ -29,13 +29,13 @@ fi
 
 # 1. Add the new user and grant root privileges
 ###############################################
-if [ -z PASS]; then
+if [ -z $PASS ]; then
    echo "PASS var not set, generating a random one..."
    PASS=`(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 16 | head -n 1)`
 fi
 adduser --ingroup sudo --gecos "" --disabled-password $ADMINUSER
 echo $ADMINUSER:$PASS | chpasswd
-echo user $ADMINUSER created with generated password $PASS
+echo user $ADMINUSER created with password $PASS
 
 # 2. Disallow root login via SSH
 ###############################################
