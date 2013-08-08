@@ -22,14 +22,14 @@ GUI="xfce4 xubuntu-artwork xubuntu-default-settings"
 ###############################################
 
 # Make sure we  are being run as root
-if [ $EUID -ne 0 ]; then
+if [[ $EUID -ne 0 ]]; then
    echo "This script must be run as root" 
    exit 1
 fi
 
 # 1. Add the new user and grant root privileges
 ###############################################
-if [!PASS]; then
+if [ -z PASS]; then
    echo "PASS var not set, generating a random one..."
    PASS=`(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 16 | head -n 1)`
 fi
@@ -45,7 +45,7 @@ sed -i 's/^PermitRootLogin yes/PermitRootLogin no/' /etc/ssh/sshd_config
 ###############################################
 apt-get update
 apt-get install -y python-software-properties # needed for apt-add-repository
-apt-add-repository ppa:brightbox/ruby-ng # includes nginx with passenger, newer ruby versions
+apt-add-repository -y ppa:brightbox/ruby-ng # includes nginx with passenger, newer ruby versions
 
 # 4. Install dev packages and GUI
 ###############################################
