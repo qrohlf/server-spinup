@@ -16,7 +16,7 @@ PACKAGES="git make ruby1.9.1 nginx-full"
 # I use a GUI for my 'sandbox' servers because it makes
 # configuration and setup much easier, but I woudn't
 # recommend installing onein an actual production environment
-GUI="xfce4 xubuntu-artwork xubuntu-default-settings" 
+GUI="xfce4 xubuntu-artwork xubuntu-default-settings tightvncserver" 
 
 # 0. Sanity Check
 ###############################################
