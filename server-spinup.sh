@@ -40,6 +40,7 @@ echo user $ADMINUSER created with password $PASS
 # 2. Disallow root login via SSH
 ###############################################
 sed -i 's/^PermitRootLogin yes/PermitRootLogin no/' /etc/ssh/sshd_config
+service ssh restart
 
 # 3. Add PPA for passenger-nginx
 ###############################################
