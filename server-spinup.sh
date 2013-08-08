@@ -22,14 +22,17 @@ GUI="xfce4 xubuntu-artwork xubuntu-default-settings"
 ###############################################
 
 # Make sure we  are being run as root
-if [[ $EUID -ne 0 ]]; then
+if [ $EUID -ne 0 ]; then
    echo "This script must be run as root" 
    exit 1
 fi
 
 # 1. Add the new user and grant root privileges
 ###############################################
-PASS=`(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 16 | head -n 1)`
+if [!PASS]; then
+   echo "PASS var not set, generating a random one..."
+   PASS=`(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 16 | head -n 1)`
+fi
 adduser --ingroup sudo --gecos "" --disabled-password $ADMINUSER
 echo $ADMINUSER:$PASS | chpasswd
 echo user $ADMINUSER created with generated password $PASS
