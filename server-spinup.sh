@@ -12,12 +12,6 @@ ADMINUSER="qrohlf"
 # Development packages to install
 PACKAGES="git make ruby1.9.1 nginx-full"
 
-# Comment this line out for no GUI
-# I use a GUI for my 'sandbox' servers because it makes
-# configuration and setup much easier, but I woudn't
-# recommend installing onein an actual production environment
-GUI="ubuntu-desktop tightvncserver" 
-
 # 0. Sanity Check
 ###############################################
 
@@ -51,7 +45,9 @@ apt-add-repository -y ppa:brightbox/ruby-ng # includes nginx with passenger, new
 # 4. Install dev packages and GUI
 ###############################################
 apt-get update
-apt-get install -y $PACKAGES $GUI
+apt-get install -y $PACKAGES
+apt-get install -y --no-install-recommends ubuntu-desktop
+apt-get install -y tightvncserver
 
 # 5. Install sexy-bash-prompt to $ADMINUSER and root bashrc
 ###############################################
