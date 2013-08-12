@@ -32,7 +32,7 @@ if [ -z $PASS ]; then
    echo "PASS var not set, generating a random one..."
    PASS=`(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 16 | head -n 1)`
 fi
-adduser --ingroup sudo --gecos "" --disabled-password $ADMINUSER
+adduser --ingroup sudo --gecos "" --disabled-password $ADMINUSER 
 echo $ADMINUSER:$PASS | chpasswd
 echo user $ADMINUSER created with password $PASS
 
@@ -44,19 +44,21 @@ echo
 sed -i 's/^PermitRootLogin yes/PermitRootLogin no/' /etc/ssh/sshd_config
 service ssh restart
 
+echo
+echo
 echo "# 3. Add PPA for passenger-nginx"
 echo "###############################################"
-apt-get update
-apt-get install -y python-software-properties # needed for apt-add-repository
-apt-add-repository -y ppa:brightbox/ruby-ng # includes nginx with passenger, newer ruby versions
+apt-get update  >/dev/null
+apt-get install -y python-software-properties  >/dev/null # needed for apt-add-repository 
+apt-add-repository -y ppa:brightbox/ruby-ng  >/dev/null # includes nginx with passenger, newer ruby versions
 
 echo
 echo
 echo "# 4. Install dev packages and GUI"
 echo "###############################################"
 echo
-apt-get update
-apt-get install -y $PACKAGES $GUI
+apt-get update  >/dev/null
+apt-get install -y $PACKAGES $GUI  >/dev/null
 
 echo
 echo
