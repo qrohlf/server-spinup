@@ -53,3 +53,9 @@ apt-get install -y tightvncserver
 ###############################################
 cd /tmp && git clone --depth 1 https://github.com/twolfson/sexy-bash-prompt && cd sexy-bash-prompt && make install
 su -c "(cd /tmp/sexy-bash-prompt && make install)" qrohlf #doesn't seem to be working yet
+
+# 6. Upgrade and reboot
+################################################
+apt-get upgrade -y
+echo "All finished! Rebooting now..."
+reboot
