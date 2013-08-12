@@ -48,6 +48,7 @@ echo
 echo
 echo "# 3. Add PPA for passenger-nginx"
 echo "###############################################"
+echo
 apt-get update  >/dev/null
 apt-get install -y python-software-properties  >/dev/null # needed for apt-add-repository 
 apt-add-repository -y ppa:brightbox/ruby-ng  >/dev/null # includes nginx with passenger, newer ruby versions
