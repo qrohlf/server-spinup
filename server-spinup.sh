@@ -12,6 +12,8 @@ ADMINUSER="qrohlf"
 # Development packages to install
 PACKAGES="git make ruby1.9.1 nginx-full"
 
+GUI="xfce4 xubuntu-artwork xubuntu-default-settings tightvncserver" 
+
 # 0. Sanity Check
 ###############################################
 
@@ -46,9 +48,7 @@ apt-add-repository -y ppa:brightbox/ruby-ng # includes nginx with passenger, new
 echo "# 4. Install dev packages and GUI"
 echo "###############################################"
 apt-get update
-apt-get install -y $PACKAGES
-apt-get install -y --no-install-recommends ubuntu-desktop
-apt-get install -y tightvncserver
+apt-get install -y $PACKAGES $GUI
 
 echo "# 5. Install sexy-bash-prompt to $ADMINUSER and root bashrc"
 echo "###############################################"
