@@ -21,8 +21,9 @@ if [[ $EUID -ne 0 ]]; then
    exit 1
 fi
 
-# 1. Add the new user and grant root privileges
-###############################################
+echo "# 1. Add the new user and grant root privileges"
+echo "###############################################"
+
 if [ -z $PASS ]; then
    echo "PASS var not set, generating a random one..."
    PASS=`(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 16 | head -n 1)`
@@ -31,31 +32,31 @@ adduser --ingroup sudo --gecos "" --disabled-password $ADMINUSER
 echo $ADMINUSER:$PASS | chpasswd
 echo user $ADMINUSER created with password $PASS
 
-# 2. Disallow root login via SSH
-###############################################
+echo "# 2. Disallow root login via SSH"
+echo "###############################################"
 sed -i 's/^PermitRootLogin yes/PermitRootLogin no/' /etc/ssh/sshd_config
 service ssh restart
 
-# 3. Add PPA for passenger-nginx
-###############################################
+echo "# 3. Add PPA for passenger-nginx"
+echo "###############################################"
 apt-get update
 apt-get install -y python-software-properties # needed for apt-add-repository
 apt-add-repository -y ppa:brightbox/ruby-ng # includes nginx with passenger, newer ruby versions
 
-# 4. Install dev packages and GUI
-###############################################
+echo "# 4. Install dev packages and GUI"
+echo "###############################################"
 apt-get update
 apt-get install -y $PACKAGES
 apt-get install -y --no-install-recommends ubuntu-desktop
 apt-get install -y tightvncserver
 
-# 5. Install sexy-bash-prompt to $ADMINUSER and root bashrc
-###############################################
+echo "# 5. Install sexy-bash-prompt to $ADMINUSER and root bashrc"
+echo "###############################################"
 cd /tmp && git clone --depth 1 https://github.com/twolfson/sexy-bash-prompt && cd sexy-bash-prompt && make install
 su -c "(cd /tmp/sexy-bash-prompt && make install)" qrohlf #doesn't seem to be working yet
 
-# 6. Upgrade and reboot
-################################################
+echo "# 6. Upgrade and reboot"
+echo "################################################"
 apt-get upgrade -y
 echo "All finished! Rebooting now..."
 reboot
