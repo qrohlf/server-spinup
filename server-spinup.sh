@@ -12,7 +12,7 @@ ADMINUSER="qrohlf"
 # Development packages to install
 PACKAGES="git make ruby1.9.1 nginx-full"
 
-GUI="xfce4 xubuntu-artwork xubuntu-default-settings tightvncserver" 
+GUI="xubuntu-desktop tightvncserver" 
 
 # 0. Sanity Check
 ###############################################
