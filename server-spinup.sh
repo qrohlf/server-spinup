@@ -23,9 +23,11 @@ if [[ $EUID -ne 0 ]]; then
    exit 1
 fi
 
+echo
+echo
 echo "# 1. Add the new user and grant root privileges"
 echo "###############################################"
-
+echo
 if [ -z $PASS ]; then
    echo "PASS var not set, generating a random one..."
    PASS=`(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 16 | head -n 1)`
@@ -34,8 +36,11 @@ adduser --ingroup sudo --gecos "" --disabled-password $ADMINUSER
 echo $ADMINUSER:$PASS | chpasswd
 echo user $ADMINUSER created with password $PASS
 
+echo
+echo
 echo "# 2. Disallow root login via SSH"
 echo "###############################################"
+echo
 sed -i 's/^PermitRootLogin yes/PermitRootLogin no/' /etc/ssh/sshd_config
 service ssh restart
 
@@ -45,18 +50,27 @@ apt-get update
 apt-get install -y python-software-properties # needed for apt-add-repository
 apt-add-repository -y ppa:brightbox/ruby-ng # includes nginx with passenger, newer ruby versions
 
+echo
+echo
 echo "# 4. Install dev packages and GUI"
 echo "###############################################"
+echo
 apt-get update
 apt-get install -y $PACKAGES $GUI
 
+echo
+echo
 echo "# 5. Install sexy-bash-prompt to $ADMINUSER and root bashrc"
 echo "###############################################"
+echo
 cd /tmp && git clone --depth 1 https://github.com/twolfson/sexy-bash-prompt && cd sexy-bash-prompt && make install
 su -c "(cd /tmp/sexy-bash-prompt && make install)" qrohlf #doesn't seem to be working yet
 
+echo
+echo
 echo "# 6. Upgrade and reboot"
 echo "################################################"
+echo
 apt-get upgrade -y
 echo "All finished! Rebooting now..."
 reboot
