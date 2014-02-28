@@ -10,7 +10,9 @@
 ADMINUSER="qrohlf"
 
 # Development packages to install
-PACKAGES="git make ruby1.9.1 build-essentials"
+PACKAGES="git make ruby1.9.1 nginx-full"
+
+GUI="xubuntu-desktop tightvncserver" 
 
 # 0. Sanity Check
 ###############################################
@@ -44,11 +46,20 @@ service ssh restart
 
 echo
 echo
-echo "# 3. Install dev packages"
+echo "# 3. Add PPA for passenger-nginx"
 echo "###############################################"
 echo
 apt-get update  >/dev/null
-apt-get install -y $PACKAGES  >/dev/null
+apt-get install -y python-software-properties  >/dev/null # needed for apt-add-repository 
+apt-add-repository -y ppa:brightbox/ruby-ng  >/dev/null # includes nginx with passenger, newer ruby versions
+
+echo
+echo
+echo "# 4. Install dev packages and GUI"
+echo "###############################################"
+echo
+apt-get update  >/dev/null
+apt-get install -y $PACKAGES $GUI  >/dev/null
 
 echo
 echo
@@ -56,7 +67,8 @@ echo "# 5. Install sexy-bash-prompt to $ADMINUSER and root bashrc"
 echo "###############################################"
 echo
 cd /tmp && git clone --depth 1 https://github.com/twolfson/sexy-bash-prompt && cd sexy-bash-prompt && make install
-su -c "(cd /tmp/sexy-bash-prompt && make install)" qrohlf
+su -c "(cd /tmp/sexy-bash-prompt && make install)" qrohlf #doesn't seem to be working yet
+
 echo
 echo
 echo "# 6. Upgrade and reboot"
