@@ -10,7 +10,7 @@
 ADMINUSER="qrohlf"
 
 # Development packages to install
-PACKAGES="git make ruby1.9.1 build-essential"
+PACKAGES="git make build-essential zip"
 
 # 0. Sanity Check
 ###############################################
