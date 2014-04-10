@@ -72,8 +72,8 @@ service ssh restart
 success "root login via SSH disabled"
 
 section "3. Install dev packages"
-apt-get update  >/dev/null
-apt-get install -y $PACKAGES  >/dev/null
+apt-get update
+apt-get install -y $PACKAGES
 success "done installing packages"
 
 section "5. Install sexy-bash-prompt to $ADMINUSER and root bashrc"
