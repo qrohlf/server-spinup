@@ -45,30 +45,40 @@ fi
 section "1. Add the new user and grant root privileges"
 if [ -z $ADMINUSER ]; then
    echo "ADMINUSER var not set, displaying interactive prompt"
-   read -s -p "Enter username for the administrative user: " ADMINUSER
+   read -p "Enter username for the administrative user: " ADMINUSER
 fi
-if [ -z $PASS ]; then
+
+while [ -z $PASS ]; do
    echo "PASS var not set, displaying interactive prompt"
    read -s -p "Enter new password for user $ADMINUSER: " PASS
+   echo
    read -s -p "Confirm password for user $ADMINUSER: " PASS_CONFIRM
-fi
+   echo
+   if [[ $PASS != $PASS_CONFIRM ]]; then
+       error "Passwords do not match"
+       unset PASS
+   fi
+done
 adduser --ingroup sudo --gecos "" --disabled-password $ADMINUSER 
 echo $ADMINUSER:$PASS | chpasswd
-echo user $ADMINUSER created with password $PASS
+success "user $ADMINUSER created with password $PASS"
 
 section "2. Disallow root login via SSH"
 sed -i 's/^PermitRootLogin yes/PermitRootLogin no/' /etc/ssh/sshd_config
 service ssh restart
+success "root login via SSH disabled"
 
 section "3. Install dev packages"
 apt-get update  >/dev/null
 apt-get install -y $PACKAGES  >/dev/null
+success "done installing packages"
 
 section "5. Install sexy-bash-prompt to $ADMINUSER and root bashrc"
 cd /tmp && git clone --depth 1 https://github.com/twolfson/sexy-bash-prompt && cd sexy-bash-prompt && make install
 su -c "(cd /tmp/sexy-bash-prompt && make install)" qrohlf
+success "done installing sexy-bash-prompt"
 
 section "6. Upgrade and reboot"
 apt-get upgrade -y
-echo "All finished! Rebooting now..."
+success "All finished! Rebooting now..."
 reboot
