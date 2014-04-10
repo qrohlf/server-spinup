@@ -10,7 +10,6 @@ notice() {
     printf "\e[0;35;49m$1\e[0m\n"
 }
 
-
 error() {
     printf "\e[0;33;49m$1\e[0m\n"
 }
@@ -45,11 +44,11 @@ fi
 
 section "1. Add the new user and grant root privileges"
 if [ -z $ADMINUSER ]; then
-   info "ADMINUSER var not set, displaying interactive prompt"
+   echo "ADMINUSER var not set, displaying interactive prompt"
    read -s -p "Enter username for the administrative user: " ADMINUSER
 fi
 if [ -z $PASS ]; then
-   info "PASS var not set, displaying interactive prompt"
+   echo "PASS var not set, displaying interactive prompt"
    read -s -p "Enter new password for user $ADMINUSER: " PASS
    read -s -p "Confirm password for user $ADMINUSER: " PASS_CONFIRM
 fi
