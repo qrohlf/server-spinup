@@ -1,6 +1,7 @@
 #!/bin/sh
 
 # server-spinup.sh - a small utility script to set up a new DigitalOcean Ubuntu server droplet
+# with an admin user and disable root login. Also installs sexy-bash-prompt because it's pretty.
 # written by @qrohlf and licensed under the WTFPL\
 
 # Logging
@@ -45,11 +46,13 @@ fi
 section "1. Add the new user and grant root privileges"
 if [ -z $ADMINUSER ]; then
    echo "ADMINUSER var not set, displaying interactive prompt"
+   echo
    read -p "Enter username for the administrative user: " ADMINUSER
 fi
 
 while [ -z $PASS ]; do
    echo "PASS var not set, displaying interactive prompt"
+   echo
    read -s -p "Enter new password for user $ADMINUSER: " PASS
    echo
    read -s -p "Confirm password for user $ADMINUSER: " PASS_CONFIRM
@@ -61,7 +64,7 @@ while [ -z $PASS ]; do
 done
 adduser --ingroup sudo --gecos "" --disabled-password $ADMINUSER 
 echo $ADMINUSER:$PASS | chpasswd
-success "user $ADMINUSER created with password $PASS"
+success "user $ADMINUSER created"
 
 section "2. Disallow root login via SSH"
 sed -i 's/^PermitRootLogin yes/PermitRootLogin no/' /etc/ssh/sshd_config
