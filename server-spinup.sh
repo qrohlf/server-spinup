@@ -31,7 +31,7 @@ prompt() {
   RESPONSE=''
   shopt -s nocasematch;
   while ! [[ "$RESPONSE" =~ ^([yn]|yes|no)$ ]]; do
-    printf "\e[0;35;49m$1\e[0m (y/n) "
+    printf "\e[0;34;49m$1\e[0m (y/n) "
     read RESPONSE
   done
 
@@ -79,11 +79,20 @@ if prompt "Install default development packages?"; then
   success "done installing packages"
 fi
 
-if prompt "5. Install sexy-bash-prompt to $ADMINUSER and root bashrc"; then
+section "Awesomeness"
+if prompt "Install sexy-bash-prompt to $ADMINUSER and root bashrc"; then
   cd /tmp && git clone --depth 1 https://github.com/twolfson/sexy-bash-prompt && cd sexy-bash-prompt && make install
   su -c "(cd /tmp/sexy-bash-prompt && make install)" $ADMINUSER
   success "done installing sexy-bash-prompt"
   echo "(you will need to '. .profile' to see the changes in your current session)"
+fi
+
+if prompt "Setup dotfiles?"; then
+  error "Sorry bro, not implemented yet."
+fi
+
+if prompt "Add SSH Key?"; then
+  error "Sorry bro, not implemented yet."
 fi
 
 section "Tools"
