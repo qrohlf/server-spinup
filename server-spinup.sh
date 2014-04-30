@@ -54,12 +54,14 @@ fi
 
 
 section "User Provisioning"
-if [ -z $ADMINUSER ]; then
-   read -p "Enter username for the administrative user: " ADMINUSER
-fi
+if prompt "Create a new sudo user?"; then
+  if [ -z $ADMINUSER ]; then
+     read -p "Enter username for the administrative user: " ADMINUSER
+  fi
 
-adduser --ingroup sudo --gecos "" $ADMINUSER 
-success "user $ADMINUSER created"
+  adduser --ingroup sudo --gecos "" $ADMINUSER 
+  success "user $ADMINUSER created"
+fi
 
 section "Security stuff"
 if prompt "Disallow root login via SSH?"; then
@@ -81,9 +83,14 @@ if prompt "5. Install sexy-bash-prompt to $ADMINUSER and root bashrc"; then
   cd /tmp && git clone --depth 1 https://github.com/twolfson/sexy-bash-prompt && cd sexy-bash-prompt && make install
   su -c "(cd /tmp/sexy-bash-prompt && make install)" $ADMINUSER
   success "done installing sexy-bash-prompt"
+  echo "(you will need to '. .profile' to see the changes in your current session)"
 fi
 
 section "Tools"
 if prompt "Install dokku on this machine?"; then
   wget -qO- https://raw.github.com/progrium/dokku/v0.2.3/bootstrap.sh | sudo DOKKU_TAG=v0.2.3 bash
 fi
+
+section "Finished!"
+success "Configuration is complete!"
+success "If you opted to disable root SSH, you should probably try SSHing localhost as the new user before closing this terminal."
