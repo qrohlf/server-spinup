@@ -22,8 +22,8 @@ success() {
 section() {
     echo
     echo
-    notice "# $1"
-    notice "###############################################"
+    echo "# $1"
+    echo "###############################################"
     echo
 }
 
@@ -58,6 +58,7 @@ if prompt "Create a new sudo user?"; then
   if [ -z $ADMINUSER ]; then
      read -p "Enter username for the administrative user: " ADMINUSER
   fi
+  export USER="$ADMINUSER"
 
   adduser --ingroup sudo --gecos "" $ADMINUSER 
   success "user $ADMINUSER created"
@@ -109,5 +110,5 @@ section "Finished!"
 success "Configuration is complete!"
 success "If you opted to disable root SSH, you should probably try SSHing localhost as the new user before closing this terminal."
 success "If you installed dokku, you can setup push access by running:"
-echo "cat ~/.ssh/id_rsa.pub |ssh $ADMINUSER@yourdomain.com \"sudo sshcommand acl-add dokku '\$USER@\$HOSTNAME'\""
+echo "cat ~/.ssh/id_rsa.pub |ssh $USER@yourdomain.com \"sudo sshcommand acl-add dokku '\$USER@\$HOSTNAME'\""
 success "bye"
