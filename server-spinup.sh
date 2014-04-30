@@ -31,7 +31,7 @@ prompt() {
   RESPONSE=''
   shopt -s nocasematch;
   while ! [[ "$RESPONSE" =~ ^([yn]|yes|no)$ ]]; do
-    printf "\e[0;34;49m$1\e[0m (y/n) "
+    printf "\e[0;36;49m$1\e[0m (y/n) "
     read RESPONSE
   done
 
@@ -103,3 +103,6 @@ fi
 section "Finished!"
 success "Configuration is complete!"
 success "If you opted to disable root SSH, you should probably try SSHing localhost as the new user before closing this terminal."
+success "If you installed dokku, you can setup push access by running:"
+echo "cat ~/.ssh/id_rsa.pub |ssh $ADMINUSER@yourdomain.com \"sudo sshcommand acl-add dokku '\$USER@\$HOSTNAME'\""
+success "bye"
