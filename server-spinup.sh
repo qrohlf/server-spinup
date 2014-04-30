@@ -75,6 +75,7 @@ if prompt "Install default development packages?"; then
   apt-get update
   apt-get install -y wget make build-essential zip software-properties-common
   sudo add-apt-repository -y ppa:git-core/ppa # latest git is always nice to have
+  apt-get update
   apt-get install -y git
   success "done installing packages"
 fi
@@ -97,7 +98,11 @@ fi
 
 section "Tools"
 if prompt "Install dokku on this machine?"; then
-  wget -qO- https://raw.github.com/progrium/dokku/v0.2.3/bootstrap.sh | sudo DOKKU_TAG=v0.2.3 bash
+  git clone https://github.com/progrium/dokku.git /usr/src/dokku
+  cd /usr/src/dokku
+  git checkout v0.2.3 #latest dokku version as of 4/30
+  make install
+  cd
 fi
 
 section "Finished!"
