@@ -52,13 +52,15 @@ if [[ $EUID -ne 0 ]]; then
    exit 1
 fi
 
+# set the user
+SPINUP_USER="$LOGNAME"
 
 section "User Provisioning"
 if prompt "Create a new sudo user?"; then
   if [ -z $ADMINUSER ]; then
      read -p "Enter username for the administrative user: " ADMINUSER
   fi
-  export USER="$ADMINUSER"
+  export SPINUP_USER="$ADMINUSER"
 
   adduser --ingroup sudo --gecos "" $ADMINUSER #not sure if this works
   success "user $ADMINUSER created"
@@ -112,6 +114,6 @@ echo
 success "If you opted to disable root SSH, you should probably try SSHing localhost as the new user before closing this terminal."
 echo
 success "If you installed dokku, you can setup push access by running:"
-echo "cat ~/.ssh/id_rsa.pub |ssh $USER@yourdomain.com \"sudo sshcommand acl-add dokku '\$USER@\$HOSTNAME'\""
+echo "cat ~/.ssh/id_rsa.pub |ssh $SPINUP_USER@yourdomain.com \"sudo sshcommand acl-add dokku '\$USER@\$HOSTNAME'\""
 echo
 success "bye"
