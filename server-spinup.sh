@@ -1,8 +1,8 @@
-#!/bin/sh
+#!/bin/bash
 
-# server-spinup.sh - a small utility script to set up a new DigitalOcean Ubuntu server droplet
-# with an admin user and disable root login. Also installs sexy-bash-prompt because it's pretty.
-# written by @qrohlf and licensed under the WTFPL\
+# server-spinup.sh - a small utility script to set up a new Ubuntu server with a
+# variety of nice things, as well as add an admin user and disable root SSH logins
+# written by @qrohlf and licensed under the WTFPL
 
 # Logging
 ##############################################
@@ -27,11 +27,21 @@ section() {
     echo
 }
 
-# Variables
-##############################################
+prompt() {
+  RESPONSE=''
+  shopt -s nocasematch;
+  while ! [[ "$RESPONSE" =~ ^([yn]|yes|no)$ ]]; do
+    printf "\e[0;35;49m$1\e[0m (y/n) "
+    read RESPONSE
+  done
 
-# Development packages to install
-PACKAGES="git make build-essential zip"
+  if [[ "$RESPONSE" =~ ^(y|yes)$ ]]; then
+    return 0
+  else 
+    return 1
+  fi
+}
+
 
 # 0. Sanity Check
 ###############################################
@@ -43,16 +53,12 @@ if [[ $EUID -ne 0 ]]; then
 fi
 
 
-section "1. Add the new user and grant root privileges"
+section "User Provisioning"
 if [ -z $ADMINUSER ]; then
-   echo "ADMINUSER var not set, displaying interactive prompt"
-   echo
    read -p "Enter username for the administrative user: " ADMINUSER
 fi
 
 while [ -z $PASS ]; do
-   echo "PASS var not set, displaying interactive prompt"
-   echo
    read -s -p "Enter new password for user $ADMINUSER: " PASS
    echo
    read -s -p "Confirm password for user $ADMINUSER: " PASS_CONFIRM
@@ -62,26 +68,34 @@ while [ -z $PASS ]; do
        unset PASS
    fi
 done
+
 adduser --ingroup sudo --gecos "" --disabled-password $ADMINUSER 
 echo $ADMINUSER:$PASS | chpasswd
 success "user $ADMINUSER created"
 
-section "2. Disallow root login via SSH"
-sed -i 's/^PermitRootLogin yes/PermitRootLogin no/' /etc/ssh/sshd_config
-service ssh restart
-success "root login via SSH disabled"
+section "Security stuff"
+if prompt "Disallow root login via SSH?"; then
+  sed -i 's/^PermitRootLogin yes/PermitRootLogin no/' /etc/ssh/sshd_config
+  service ssh restart
+  success "root login via SSH disabled"
+fi
 
-section "3. Install dev packages"
-apt-get update
-apt-get install -y $PACKAGES
-success "done installing packages"
+section "Environment"
+if prompt "Install default development packages?"; then
+  apt-get update
+  apt-get install -y wget make build-essential zip software-properties-common
+  sudo add-apt-repository -y ppa:git-core/ppa # latest git is always nice to have
+  apt-get install -y git
+  success "done installing packages"
+fi
 
-section "5. Install sexy-bash-prompt to $ADMINUSER and root bashrc"
-cd /tmp && git clone --depth 1 https://github.com/twolfson/sexy-bash-prompt && cd sexy-bash-prompt && make install
-su -c "(cd /tmp/sexy-bash-prompt && make install)" qrohlf
-success "done installing sexy-bash-prompt"
+if prompt "5. Install sexy-bash-prompt to $ADMINUSER and root bashrc"; then
+  cd /tmp && git clone --depth 1 https://github.com/twolfson/sexy-bash-prompt && cd sexy-bash-prompt && make install
+  su -c "(cd /tmp/sexy-bash-prompt && make install)" $ADMINUSER
+  success "done installing sexy-bash-prompt"
+fi
 
-section "6. Upgrade and reboot"
-apt-get upgrade -y
-success "All finished! Rebooting now..."
-reboot
+section "Tools"
+if prompt "Install dokku on this machine?"; then
+  wget -qO- https://raw.github.com/progrium/dokku/v0.2.3/bootstrap.sh | sudo DOKKU_TAG=v0.2.3 bash
+fi
