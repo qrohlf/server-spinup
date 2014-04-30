@@ -58,19 +58,7 @@ if [ -z $ADMINUSER ]; then
    read -p "Enter username for the administrative user: " ADMINUSER
 fi
 
-while [ -z $PASS ]; do
-   read -s -p "Enter new password for user $ADMINUSER: " PASS
-   echo
-   read -s -p "Confirm password for user $ADMINUSER: " PASS_CONFIRM
-   echo
-   if [[ $PASS != $PASS_CONFIRM ]]; then
-       error "Passwords do not match"
-       unset PASS
-   fi
-done
-
-adduser --ingroup sudo --gecos "" --disabled-password $ADMINUSER 
-echo $ADMINUSER:$PASS | chpasswd
+adduser --ingroup sudo --gecos "" $ADMINUSER 
 success "user $ADMINUSER created"
 
 section "Security stuff"
