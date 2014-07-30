@@ -63,8 +63,10 @@ if prompt "Create a new sudo user?"; then
   export SPINUP_USER="$ADMINUSER"
   echo "Creating user $ADMINUSER"
   adduser --ingroup sudo --gecos "" $ADMINUSER #not sure if this works
+  echo "Generating ssh keys for user qrohlf"
+  su qrohlf -c "ssh-keygen -t rsa -N '' -f ~/.ssh/id_rsa"
   echo "Adding root authorized_keys to $ADMINUSER"
-  cp /root/.ssh/authorized_keys /home/$ADMINUSER/.ssh/
+  cp /root/.ssh/authorized_keys /home/$ADMINUSER/.ssh/authorized_keys
   success "user $ADMINUSER created"
 fi
 
