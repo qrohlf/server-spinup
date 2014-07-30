@@ -4,6 +4,13 @@
 # variety of nice things, as well as add an admin user and disable root SSH logins
 # written by @qrohlf and licensed under the WTFPL
 
+# strict mode (http://redsymbol.net/articles/unofficial-bash-strict-mode/)
+set -euo pipefail
+IFS=$'\n\t'
+
+# Constants
+LOCALHOST=`hostname`
+
 # Logging
 ##############################################
 # nice colorized output
@@ -65,8 +72,10 @@ if prompt "Create a new sudo user?"; then
   adduser --ingroup sudo --gecos "" $ADMINUSER #not sure if this works
   echo "Generating ssh keys for user qrohlf"
   su qrohlf -c "ssh-keygen -t rsa -N '' -f ~/.ssh/id_rsa"
-  echo "Adding root authorized_keys to $ADMINUSER"
-  cp /root/.ssh/authorized_keys /home/$ADMINUSER/.ssh/authorized_keys
+  if prompt "Copy root authorized_keys to $ADMINUSER authorized_keys?"; then
+    echo "Adding root authorized_keys to $ADMINUSER"
+    cp /root/.ssh/authorized_keys /home/$ADMINUSER/.ssh/authorized_keys
+  fi
   success "user $ADMINUSER created"
 fi
 
@@ -110,6 +119,13 @@ if prompt "Install dokku on this machine?"; then
   git checkout v0.2.3 #latest dokku version as of 4/30
   make install
   cd
+  if prompt "Set a custom VHOST for dokku to use?"; then
+    if [ -z $VHOST ]; then
+       read -p "Enter your custom VHOST: " VHOST
+    fi
+    echo "$VHOST" > /home/dokku/VHOST
+    LOCALHOST="$VHOST"
+  fi
 fi
 
 section "Finished!"
@@ -118,6 +134,6 @@ echo
 success "If you opted to disable root SSH, you should probably try SSHing into the box as the new user before closing this terminal."
 echo
 success "If you installed dokku, you can setup push access by running:"
-echo "cat ~/.ssh/id_rsa.pub |ssh $SPINUP_USER@yourdomain.com \"sudo sshcommand acl-add dokku '\$USER@\$HOSTNAME'\""
+echo "cat ~/.ssh/id_rsa.pub |ssh $SPINUP_USER@$LOCALHOST \"sudo sshcommand acl-add dokku '\$USER@\$HOSTNAME'\""
 echo
 success "bye"
