@@ -10,6 +10,9 @@ IFS=$'\n\t'
 
 # Constants
 LOCALHOST=`hostname`
+ADMINUSER=${ADMINUSER:-''}
+VHOST=${VHOST:-''}
+
 
 # Logging
 ##############################################
