@@ -70,7 +70,7 @@ if prompt "Create a new sudo user?"; then
   if [ -z $ADMINUSER ]; then
      read -p "Enter username for the administrative user: " ADMINUSER
   fi
-  export SPINUP_USER="$ADMINUSER"
+  SPINUP_USER="$ADMINUSER"
   echo "Creating user $ADMINUSER"
   adduser --ingroup sudo --gecos "" $ADMINUSER #not sure if this works
   echo "adding $ADMINUSER to sudoers file"
