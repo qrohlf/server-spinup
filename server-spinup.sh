@@ -119,12 +119,14 @@ if prompt "Install dokku on this machine?"; then
   git checkout v0.2.3 #latest dokku version as of 4/30
   make install
   cd
+  success "dokku installed"
   if prompt "Set a custom VHOST for dokku to use?"; then
     if [ -z $VHOST ]; then
        read -p "Enter your custom VHOST: " VHOST
     fi
     echo "$VHOST" > /home/dokku/VHOST
     LOCALHOST="$VHOST"
+    success "custom VHOST configured"
   fi
 fi
 
