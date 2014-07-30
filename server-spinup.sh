@@ -37,7 +37,7 @@ prompt() {
 
   if [[ "$RESPONSE" =~ ^(y|yes)$ ]]; then
     return 0
-  else 
+  else
     return 1
   fi
 }
@@ -48,7 +48,7 @@ prompt() {
 
 # Make sure we  are being run as root
 if [[ $EUID -ne 0 ]]; then
-   error "This script must be run as root" 
+   error "This script must be run as root"
    exit 1
 fi
 
@@ -61,8 +61,10 @@ if prompt "Create a new sudo user?"; then
      read -p "Enter username for the administrative user: " ADMINUSER
   fi
   export SPINUP_USER="$ADMINUSER"
-
+  echo "Creating user $ADMINUSER"
   adduser --ingroup sudo --gecos "" $ADMINUSER #not sure if this works
+  echo "Adding root authorized_keys to $ADMINUSER"
+  cp /root/.ssh/authorized_keys /home/$ADMINUSER/.ssh/
   success "user $ADMINUSER created"
 fi
 
@@ -111,7 +113,7 @@ fi
 section "Finished!"
 success "Configuration is complete!"
 echo
-success "If you opted to disable root SSH, you should probably try SSHing localhost as the new user before closing this terminal."
+success "If you opted to disable root SSH, you should probably try SSHing into the box as the new user before closing this terminal."
 echo
 success "If you installed dokku, you can setup push access by running:"
 echo "cat ~/.ssh/id_rsa.pub |ssh $SPINUP_USER@yourdomain.com \"sudo sshcommand acl-add dokku '\$USER@\$HOSTNAME'\""
