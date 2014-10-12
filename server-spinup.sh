@@ -94,7 +94,7 @@ fi
 section "Environment"
 if prompt "Install default development packages?"; then
   apt-get update
-  apt-get install -y wget make build-essential zip software-properties-common
+  apt-get install -y wget make build-essential zip software-properties-common ruby-dev
   sudo add-apt-repository -y ppa:git-core/ppa # latest git is always nice to have
   apt-get update
   apt-get install -y git
