@@ -95,7 +95,8 @@ section "Environment"
 if prompt "Install default development packages?"; then
   apt-get update
   apt-get install -y wget make build-essential zip software-properties-common ruby-dev
-  sudo add-apt-repository -y ppa:git-core/ppa # latest git is always nice to have
+  # latest git is always nice to have, but we need software-properties-common to use apt-add-repository
+  sudo add-apt-repository -y ppa:git-core/ppa
   apt-get update
   apt-get install -y git
   success "done installing packages"
@@ -133,6 +134,16 @@ if prompt "Install dokku on this machine?"; then
     LOCALHOST="$VHOST"
     success "custom VHOST configured"
   fi
+fi
+
+if prompt "Install cloud9 IDE on this machine?"; then
+  su "$SPINUP_USER"
+  cd ~
+  git clone https://github.com/ajaxorg/cloud9.git
+  cd cloud9
+  npm install
+  success "cloud9 IDE installed to `pwd`"
+  success "to run cloud9: cd `pwd` && bin/cloud9.sh -l 0.0.0.0"
 fi
 
 section "Finished!"
