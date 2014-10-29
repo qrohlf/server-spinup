@@ -122,7 +122,7 @@ section "Tools"
 if prompt "Install dokku on this machine?"; then
   git clone https://github.com/progrium/dokku.git /usr/src/dokku
   cd /usr/src/dokku
-  git checkout v0.2.3 #latest dokku version as of 4/30
+  # git checkout v0.2.3 #latest dokku version as of 4/30
   make install
   cd
   success "dokku installed"
