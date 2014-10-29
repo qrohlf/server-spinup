@@ -80,6 +80,7 @@ if prompt "Create a new sudo user?"; then
   if prompt "Copy root authorized_keys to $ADMINUSER authorized_keys?"; then
     echo "Adding root authorized_keys to $ADMINUSER"
     cp /root/.ssh/authorized_keys /home/$ADMINUSER/.ssh/authorized_keys
+    chown $ADMINUSER /home/$ADMINUSER/.ssh/authorized_keys
   fi
   success "user $ADMINUSER created"
 fi
